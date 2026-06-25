@@ -6,23 +6,59 @@
   <title>Voice & Paws</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      height: 100vh; background: #1a1a1a;
+    body { height: 100vh; background: #1a1a1a; user-select: none; -webkit-tap-highlight-color: transparent; }
+    #overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
     }
-    audio {
-      width: 300px; max-width: 85vw;
-      outline: none;
+    #play-icon {
+      width: 80px; height: 80px;
+      border: 2px solid #888; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
     }
-    p {
+    #play-icon::after {
+      content: ''; display: block;
+      width: 0; height: 0;
+      border-left: 24px solid #888;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      margin-left: 6px;
+    }
+    #overlay p {
+      color: #888; font-family: system-ui, sans-serif;
+      font-size: 15px; text-align: center;
+    }
+    .playing #overlay { display: none; }
+    #player {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 16px; display: none;
+    }
+    .playing #player { display: block; }
+    #player audio { width: 100%; max-width: 100%; }
+    #player p {
       color: #666; font-family: system-ui, sans-serif;
-      font-size: 14px; margin-top: 24px;
+      font-size: 13px; text-align: center; margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
-  <audio src="sound.mp3" preload="auto" controls autoplay></audio>
-  <p>scan to hear them</p>
+  <div id="overlay" onclick="play()">
+    <div id="play-icon"></div>
+    <p>tap anywhere to listen</p>
+  </div>
+  <div id="player">
+    <p>Voice &amp; Paws</p>
+    <audio id="audio" src="sound.mp3" preload="auto" controls></audio>
+  </div>
+  <script>
+    function play() {
+      document.body.className = 'playing';
+      var a = document.getElementById('audio');
+      a.play().catch(function(e) { console.log(e); });
+    }
+  </script>
 </body>
 </html>
